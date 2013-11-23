@@ -1,4 +1,12 @@
 #
+# For CAEN
+#
+
+PATH := /usr/um/gcc-4.7.0/bin:$(PATH)
+LD_LIBRARY_PATH := /usr/um/gcc-4.7.0/lib64
+LD_RUN_PATH := /usr/um/gcc-4.7.0/lib64
+
+#
 # These are the variables you need to edit when files are added / removed
 #
 # PROGRAM_SOURCE is the name of the .cpp file holding the main method (including the .cpp suffix)
@@ -7,13 +15,14 @@
 
 PROGRAM_SOURCE := main.cpp
 LIBRARY_SOURCE := MyClass.cpp
-TEST_PROGRAM_SOURCE :=
-#INTERMEDIATE_FOLDER := build
+TEST_PROGRAM_FILES := mytest.txt
+# test2.txt, etc...
+INTERMEDIATE_FOLDER := .
 
 #
 # OS specific suffixes, prefixes, and switches used by make
 #
-# FOR OS/X: CPP=.cpp, OBJ=.o, DYS=.dylib, DYP=lib, ARS=.a, ARP=lib, EXE=<blank>, DEP=.d, USE_RPATH=yes, USE_INSTALLDIR=yes
+# FOR OS/X: CPP=.cpp, OBJ=.o, EXE=<blank>, DEP=.d,
 #
 
 CPP := .cpp
@@ -21,15 +30,10 @@ OBJ := .o
 EXE :=
 DEP := .d
 G++ := clang++ --std=c++11 --stdlib=libstdc++
-CPP11_LIB := -lstdc++
 
 #
 # Variables used internally by make
 #
-
-ifeq ($(INTERMEDIATE_FOLDER),)
-	INTERMEDIATE_FOLDER := .
-endif
 
 INTERMEDIATE_FOLDER := $(addsuffix /,$(INTERMEDIATE_FOLDER))
 
@@ -42,7 +46,7 @@ LIBRARY_DEPEND := $(LIBRARY_OBJECTS:$(OBJ)=$(DEP))
 
 # end of variables - start of targets
 
-.PHONY: all clean deliver cleanall run cleancover cover runtest
+.PHONY: all clean test
 .PRECIOUS: $(LIBRARY_OBJECTS)
 
 all: $(PROGRAM_BINARY)
@@ -51,10 +55,13 @@ clean:
 	rm -f $(PROGRAM_OBJECT) $(PROGRAM_BINARY) $(LIBRARY_OBJECTS)
 	rm -f $(INTERMEDIATE_FOLDER)*.d
 
-test: all $(PROGRAM_BINARY)
-	@mkdir -p cover
+test: all
 	@for progs in $(PROGRAM_BINARY); do \
-		$$progs ; \
+        for script in $(TEST_PROGRAM_FILES); do \
+            $$progs < $$script > $$script.result ; \
+            diff $$script.result $$script.answer ; \
+            echo "-----" ; \
+        done \
 	done
 
 $(INTERMEDIATE_FOLDER)%$(OBJ): %$(CPP)

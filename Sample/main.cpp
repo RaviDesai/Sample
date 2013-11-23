@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <string>
 using namespace std;
 
 #include "MyClass.h"
@@ -18,6 +19,12 @@ int main(int argc, const char * argv[])
     MyClass mc;
     cout << "Hello, World! ";
     mc.print();
+
+    string msg;
+    cin >> msg;
+    
+    cout << "from stdin: " << msg << endl;
+    
     return 0;
 }
 
