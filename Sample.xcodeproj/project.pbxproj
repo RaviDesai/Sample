@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		412FD338184117360059306A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 412FD337184117360059306A /* main.cpp */; };
 		412FD33A184117360059306A /* Sample.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 412FD339184117360059306A /* Sample.1 */; };
+		41B2C98C1841201000931FE5 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 41B2C98B1841201000931FE5 /* Makefile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +29,7 @@
 		412FD334184117360059306A /* Sample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Sample; sourceTree = BUILT_PRODUCTS_DIR; };
 		412FD337184117360059306A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		412FD339184117360059306A /* Sample.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Sample.1; sourceTree = "<group>"; };
+		41B2C98B1841201000931FE5 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 			children = (
 				412FD337184117360059306A /* main.cpp */,
 				412FD339184117360059306A /* Sample.1 */,
+				41B2C98B1841201000931FE5 /* Makefile */,
 			);
 			path = Sample;
 			sourceTree = "<group>";
@@ -117,6 +120,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41B2C98C1841201000931FE5 /* Makefile in Sources */,
 				412FD338184117360059306A /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -229,6 +233,7 @@
 				412FD33F184117360059306A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
