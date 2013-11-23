@@ -6,7 +6,7 @@
 #
 
 PROGRAM_SOURCE := main.cpp
-LIBRARY_SOURCE :=
+LIBRARY_SOURCE := MyClass.cpp
 TEST_PROGRAM_SOURCE :=
 INTERMEDIATE_FOLDER := build
 
@@ -54,8 +54,6 @@ all: $(PROGRAM_BINARY) $(TEST_PROGRAM_BINARY)
 
 clean: 
 	rm -f $(PROGRAM_OBJECT) $(PROGRAM_BINARY) $(LIBRARY_OBJECTS) $(TEST_PROGRAM_BINARY) $(TEST_PROGRAM_OBJECT)
-
-cleanall: clean cleancover
 	rm -f $(INTERMEDIATE_FOLDER)*.d
 
 test: all $(TEST_PROGRAM_BINARY) $(TEST_EMBEDDED_BINARY)
@@ -63,7 +61,6 @@ test: all $(TEST_PROGRAM_BINARY) $(TEST_EMBEDDED_BINARY)
 	@for progs in $(TEST_PROGRAM_BINARY); do \
 		$$progs ; \
 	done
-
 
 $(INTERMEDIATE_FOLDER)%$(OBJ): %$(CPP)
 	$(G++) -Wall $(COVERAGE) -c $< $(CPP_INCDIR) -o $@

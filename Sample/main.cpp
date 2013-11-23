@@ -9,11 +9,15 @@
 #include <iostream>
 using namespace std;
 
+#include "MyClass.h"
+
 int main(int argc, const char * argv[])
 {
 
     // insert code here...
-    cout << "Hello, World!\n";
+    MyClass mc;
+    cout << "Hello, World! ";
+    mc.print();
     return 0;
 }
 
