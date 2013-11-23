@@ -8,15 +8,12 @@
 PROGRAM_SOURCE := main.cpp
 LIBRARY_SOURCE := MyClass.cpp
 TEST_PROGRAM_SOURCE :=
-INTERMEDIATE_FOLDER := build
+#INTERMEDIATE_FOLDER := build
 
 #
 # OS specific suffixes, prefixes, and switches used by make
 #
 # FOR OS/X: CPP=.cpp, OBJ=.o, DYS=.dylib, DYP=lib, ARS=.a, ARP=lib, EXE=<blank>, DEP=.d, USE_RPATH=yes, USE_INSTALLDIR=yes
-# FOR WIN: CPP=.cpp, OBJ=.obj DYS=.dll, DYP=<blank>, ARS=.a, ARP=<blank>, EXE=.exe, DEP=.d, USE_RPATH=no, USE_INSTALLDIR=no
-# FOR Linux: CPP=.cpp, OBJ=.o, DYS=.so, DYP=lib, ARS=.a, ARP=lib, EXE=<blank>, DEP=.d, USE_RPATH=yes, USE_INSTALLDIR=no
-# Note - Linux is untested at this time
 #
 
 CPP := .cpp
@@ -38,27 +35,25 @@ INTERMEDIATE_FOLDER := $(addsuffix /,$(INTERMEDIATE_FOLDER))
 
 PROGRAM_OBJECT := $(addprefix $(INTERMEDIATE_FOLDER),$(PROGRAM_SOURCE:$(CPP)=$(OBJ)))
 LIBRARY_OBJECTS := $(addprefix $(INTERMEDIATE_FOLDER),$(LIBRARY_SOURCE:$(CPP)=$(OBJ)))
-TEST_PROGRAM_OBJECT := $(addprefix $(INTERMEDIATE_FOLDER),$(TEST_PROGRAM_SOURCE:$(CPP)=$(OBJ)))
 PROGRAM_BINARY := $(PROGRAM_OBJECT:$(OBJ)=$(EXE))
-TEST_PROGRAM_BINARY := $(TEST_PROGRAM_OBJECT:$(OBJ)=$(EXE))
 
 PROGRAM_DEPEND := $(PROGRAM_OBJECT:$(OBJ)=$(DEP))
-TEST_PROGRAM_DEPEND := $(TEST_PROGRAM_OBJECT:$(OBJ)=$(DEP))
+LIBRARY_DEPEND := $(LIBRARY_OBJECTS:$(OBJ)=$(DEP))
 
 # end of variables - start of targets
 
 .PHONY: all clean deliver cleanall run cleancover cover runtest
 .PRECIOUS: $(LIBRARY_OBJECTS)
 
-all: $(PROGRAM_BINARY) $(TEST_PROGRAM_BINARY)
+all: $(PROGRAM_BINARY)
 
 clean: 
-	rm -f $(PROGRAM_OBJECT) $(PROGRAM_BINARY) $(LIBRARY_OBJECTS) $(TEST_PROGRAM_BINARY) $(TEST_PROGRAM_OBJECT)
+	rm -f $(PROGRAM_OBJECT) $(PROGRAM_BINARY) $(LIBRARY_OBJECTS)
 	rm -f $(INTERMEDIATE_FOLDER)*.d
 
-test: all $(TEST_PROGRAM_BINARY) $(TEST_EMBEDDED_BINARY)
+test: all $(PROGRAM_BINARY)
 	@mkdir -p cover
-	@for progs in $(TEST_PROGRAM_BINARY); do \
+	@for progs in $(PROGRAM_BINARY); do \
 		$$progs ; \
 	done
 
@@ -80,13 +75,4 @@ $(PROGRAM_BINARY): % : %$(OBJ)
     
 $(PROGRAM_BINARY): $(LIBRARY_OBJECTS)
 
-$(TEST_PROGRAM_BINARY): % : %$(OBJ)
-	$(G++) -Wall -g -O0  $(<) $(LIBRARY_OBJECTS) -o $(@) -L$(INTERMEDIATE_FOLDER)
-	@$(G++) -MM $(CPP_INCDIR) $(notdir $(<:$(OBJ)=$(CPP))) > $(<:$(OBJ)=$(DEP))
-	@mv $(<:$(OBJ)=$(DEP)) $(<:$(OBJ)=.tmp)
-	@sed "s|^.*:|$(@):|" $(<:$(OBJ)=.tmp) > $(<:$(OBJ)=$(DEP))
-	@rm $(<:$(OBJ)=.tmp)
-
-$(TEST_PROGRAM_BINARY): $(LIBRARY_OBJECTS)
-
--include $(PROGRAM_DEPEND) $(TEST_PROGRAM_DEPEND)
+-include $(PROGRAM_DEPEND) $(LIBRARY_DEPEND)
